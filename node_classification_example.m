@@ -68,6 +68,7 @@ atomDataValidation = atomData(idxValidation,:);
 atomDataTest = atomData(idxTest,:);
 
 % convert data for training
+[ATrain,XTrain,labelsTrain] = preprocessData(adjacencyDataTrain,coulombDataTrain,atomDataTrain);
 [AValidation,XValidation,labelsValidation] = preprocessData(adjacencyDataValidation,coulombDataValidation,atomDataValidation);
 
 % normalize training data
@@ -188,6 +189,8 @@ cm = confusionchart(labelsTest,YTest, ...
     ColumnSummary="column-normalized", ...
     RowSummary="row-normalized");
 title("GCN QM7 Confusion Chart");
+
+save('gcn.mat', "accuracy", "parameters");
 
 
 %% Predict using new data
