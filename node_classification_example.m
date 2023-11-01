@@ -190,7 +190,7 @@ cm = confusionchart(labelsTest,YTest, ...
     RowSummary="row-normalized");
 title("GCN QM7 Confusion Chart");
 
-save('gcn.mat', "accuracy", "parameters");
+save('gcn.mat', "accuracy", "parameters", "muX", "sigsqX");
 
 
 %% Predict using new data
