@@ -84,36 +84,92 @@ Averify = normalizeAdjacency(ATest);
 % input values for each node is X
 lb = extractdata(XTest-0.1);
 ub = extractdata(XTest+0.1);
-Xverify = Star(lb,ub);
+Xverify = ImageStar(lb,ub);
+
+% Do we need a new representation for graphs?
 
 
 %% Compute reachability
 L = ReluLayer(); % Create relu layer;
 
-%  LAYER 1
-% inference
+%%%%%%%%  LAYER 1  %%%%%%%%
+
+% inference with original input
 Z2 = Averify * XTest * w1;
-Z2 = relu(Z2) + XTest;
+Z2_ = relu(Z2) + XTest;
+
+% inference with lower bound
+lb2 = Averify * lb * w1;
+lb2_ = relu(lb2) + lb;
+
+% inference with upper bound
+ub2 = Averify * ub * w1;
+ub2_ = relu(ub2) + ub;
+
 % reachability
-X2 = Xverify.affineMap(Averify, []);
-newV = X2.V * w1;
-X2 = X2.affineMap(w1, []);
-X2 = L.reach(X2, 'exact-star');
+% for the first step, we only need to work on the basis vectors
+newV = Xverify.V;
+newV = reshape(newV, [16 17]);
+newV = Averify * newV;
+newV = tensorprod(newV, extractdata(w1));
+newV = permute(newV, [1 4 3 2]);
+X2 = ImageStar(newV, Xverify.C, Xverify.d, Xverify.pred_lb, Xverify.pred_ub);
+% part 2
+X2b = L.reach(X2, 'approx-star');
+% for i = size()
+% X2 = Xverify.affineMap(Averify, []);
+% newV = Averify * Xverify.V(:,1) * w1;
+% newV = X2.V * w1;
+% X2 = X2.affineMap(w1, []);
+% X2 = L.reach(X2, 'exact-star');
+
+
+%%%%%%%%  LAYER 2  %%%%%%%%
  
-%  LAYER 2
-% inference
-Z3 = ANorm * Z2 * w2;
-Z3 = relu(Z3) + Z2;
+% inference with original input
+Z3 = Averify * Z2_ * w2;
+Z3_ = relu(Z3) + Z2_;
+
+% inference with lower bound
+lb3 = Averify * lb2_ * w2;
+lb3_ = relu(Z3) + lb2_;
+
+% inference with upper bound
+ub3 = Averify * ub2_ * w2;
+ub3_ = relu(ub3) + ub2_;
+
 % reachability
 
 
-%  LAYER 3
-% inference
-Z4 = ANorm * Z3 * w3;
-Y = softmax(Z4,DataFormat="BC");
+%%%%%%%%  LAYER 3  %%%%%%%%
+ 
+% inference with original input
+Z4 = Averify * Z3_ * w3;
+% Y = softmax(Z4,DataFormat="BC");
+
+% inference with lower bound
+lb4 = Averify * lb3_ * w3;
+% Y = softmax(Z4,DataFormat="BC");
+
+% inference with upper bound
+ub4 = Averify * ub3_ * w3;
+% Y = softmax(Z4,DataFormat="BC");
+
 % reachability
 
 
+
+%% Notes
+% Although simple enough in this example for inference, there seems to be
+% several challenges for reachability
+% 1) What is the "input set"?
+%    - The input is adjacency matrix + X (node values), but there are used
+%    differently. Do we need a new data structure to represent these
+%    graphs?
+% 2) "Bias" in relu layers
+%    - What typically is the bias in other NN-types, here is the input to
+%    the layer, which has different dimensions than current "set".
+%    Minkowski sum should not work, so let's see how we can manage that.
 
 
 %% Helper functions

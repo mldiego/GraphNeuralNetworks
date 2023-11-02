@@ -13,12 +13,6 @@
 % Time to start, make a prototype, and then we can try to generalize
 
 %% Load GNN and input (using GNN_simple_example.m)
-rng(77777);
-n_h = 4; %number of neurons in the hidden layer
-n_y = 2; %number of neurons in the output layer
-
-W0 = randn(size(X,2),n_h)*0.01;
-W1 = randn(n_h, n_y)*0.01;
 
 % Adjacency matrix (How the nodes are connected)
 A = [0 1 1 1 0 0;
@@ -29,6 +23,13 @@ A = [0 1 1 1 0 0;
     0 0 0 1 1 0];
 % Node features matrix (values of node)
 X = [0 1 2 3 4 5]';
+
+rng(77777);
+n_h = 4; %number of neurons in the hidden layer
+n_y = 2; %number of neurons in the output layer
+
+W0 = randn(size(X,2),n_h)*0.01;
+W1 = randn(n_h, n_y)*0.01;
 
 %% Start the process
 
