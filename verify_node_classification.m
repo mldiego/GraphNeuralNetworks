@@ -170,6 +170,9 @@ ub4 = Averify * ub3_ * w3;
 %    - What typically is the bias in other NN-types, here is the input to
 %    the layer, which has different dimensions than current "set".
 %    Minkowski sum should not work, so let's see how we can manage that.
+%   - Possible solution: we can do this by using a for loop to add the
+%   "bias" to each projected dimension with same dimensions as the "bias",
+%   and then "concatenate" them together?
 
 
 %% Helper functions
