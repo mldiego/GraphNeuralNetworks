@@ -143,19 +143,20 @@ ub3_ = relu(ub3) + ub2_;
 % part 1
 % for the first step, we only need to work on the basis vectors
 newV = X2b_.V;
-newV = tensorprod(full(Averify), newV, 1);
-newV = tensorprod(newV, extractdata(w2),2);
+newV = tensorprod(full(Averify), newV, 2, 1);
+newV = tensorprod(newV, extractdata(w2),2,1);
 newV = permute(newV, [1 4 2 3]);
 X3 = ImageStar(newV, X2b_.C, X2b_.d, X2b_.pred_lb, X2b_.pred_ub);
 % check if inferenced is contained in the set
 check3 = X3.contains(extractdata(Z3)); % so far so good?
 % part 2
 X3b = L.reach(X3, 'approx-star'); % this seems okay as well
-repV = X2b_.V;
-Xrep = ImageStar(repV, X2b_.C, X2b_.d, X2b_.pred_lb, X2b_.pred_ub);
-X3b_ = X3b.MinkowskiSum(Xrep);
+% repV = X2b_.V;
+% Xrep = ImageStar(repV, X2b_.C, X2b_.d, X2b_.pred_lb, X2b_.pred_ub);
+% X3b_ = X3b.MinkowskiSum(Xrep);
+X3b_ = X3b.MinkowskiSum(X2b_);
 % check if inferenced is contained in the set
-check4 = X3b_.contains(extractdata(Z3_)); % so far so good?
+% check4 = X3b_.contains(extractdata(Z3_)); % so far so good?
 
 
 %%%%%%%%  LAYER 3  %%%%%%%%
@@ -173,23 +174,13 @@ ub4 = Averify * ub3_ * w3;
 % Y = softmax(Z4,DataFormat="BC");
 
 % reachability
-% part 1
 % for the first step, we only need to work on the basis vectors
 newV = X3b_.V;
-newV = tensorprod(full(Averify), newV, 1);
-newV = tensorprod(newV, extractdata(w3),2);
+newV = tensorprod(full(Averify), newV, 2, 1);
+newV = tensorprod(newV, extractdata(w3), 2, 1);
 newV = permute(newV, [1 4 2 3]);
 X4 = ImageStar(newV, X3b_.C, X3b_.d, X3b_.pred_lb, X3b_.pred_ub);
-% check if inferenced is contained in the set
-check5 = X4.contains(extractdata(Z4)); % so far so good?
-% part 2
-X4b = L.reach(X4, 'approx-star'); % this seems okay as well
-repV = X3b_.V;
-Xrep = ImageStar(repV, X3b_.C, X3b_.d, X3b_.pred_lb, X3b_.pred_ub);
-X4b_ = X4b.MinkowskiSum(Xrep);
-% check if inferenced is contained in the set
-check6 = X4b_.contains(extractdata(Z4_)); % so far so good?
-
+[yLower, yUpper] = X4.getRanges();
 
 
 %% Notes
