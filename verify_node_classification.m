@@ -183,6 +183,31 @@ X4 = ImageStar(newV, X3b_.C, X3b_.d, X3b_.pred_lb, X3b_.pred_ub);
 [yLower, yUpper] = X4.getRanges();
 
 
+%% Visualize results
+% Get middle point for each output and range sizes
+mid_range = (yLower + yUpper)/2;
+range_size = yUpper - mid_range;
+
+Yout = extractdata(Z4);
+
+% Label for x-axis
+% xlabel = ["H", "C", "N", "O", "S"]; % Atom symbols
+x = [0 1 2 3 4];
+
+% Visualize set ranges and evaluation points
+for i = 1:size(mid_range,1)
+    f = figure;
+    errorbar(x, mid_range(i,:), range_size(i,:), '.');
+    hold on;
+    xlim([-0.5 4.5]);
+    scatter(x, Yout(i,:), 'x', 'MarkerEdgeColor', 'r');
+    xticks(x);
+    xticklabels(x);
+    title("Atom "+string(i))
+    saveas(f, "figures/verify_node_classification_"+string(i), "png");
+end
+
+
 %% Notes
 % Although simple enough in this example for inference, there seems to be
 % several challenges for reachability
