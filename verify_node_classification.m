@@ -163,15 +163,15 @@ X3b_ = X3b.MinkowskiSum(X2b_);
  
 % inference with original input
 Z4 = Averify * Z3_ * w3;
-% Y = softmax(Z4,DataFormat="BC");
+Z4_prob = softmax(Z4, DataFormat="BC");
 
 % inference with lower bound
 lb4 = Averify * lb3_ * w3;
-% Y = softmax(Z4,DataFormat="BC");
+lb4_prob = softmax(lb4,DataFormat="BC");
 
 % inference with upper bound
 ub4 = Averify * ub3_ * w3;
-% Y = softmax(Z4,DataFormat="BC");
+ub4_prob = softmax(ub4,DataFormat="BC");
 
 % reachability
 % for the first step, we only need to work on the basis vectors
@@ -192,7 +192,13 @@ Yout = extractdata(Z4);
 
 % Label for x-axis
 % xlabel = ["H", "C", "N", "O", "S"]; % Atom symbols
+% classes = categories(labelsTrain);
 x = [0 1 2 3 4];
+
+% Check for folder
+if ~isfolder("figures")
+    mkdir("figures");
+end
 
 % Visualize set ranges and evaluation points
 for i = 1:size(mid_range,1)

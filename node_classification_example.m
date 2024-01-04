@@ -1,6 +1,44 @@
 %% Training example using GCNs
 % https://www.mathworks.com/help/deeplearning/ug/node-classification-using-graph-convolutional-network.html
 
+% What is actually happening?
+%%%%% DATA
+% MATLAB descriptions:
+% Molecular data set consisting of 7165 molecules composed of up to 23 atoms. 
+% That is, the molecule with the highest number of atoms has 23 atoms.
+%
+% Official website:
+% The dataset is composed of three multidimensional arrays X (7165 x 23 x 23), 
+% T (7165) and P (5 x 1433) representing the inputs (Coulomb matrices), 
+% the labels (atomization energies) and the splits for cross-validation, respectively. 
+% The dataset also contain two additional multidimensional 
+% arrays Z (7165) and R (7165 x 3) representing the atomic charge and 
+% the cartesian coordinate of each atom in the molecules.
+%
+% From Pytorch library: 
+% https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.datasets.QM7b.html#torch_geometric.datasets.QM7b
+% The QM7b dataset from the “MoleculeNet: A Benchmark for Molecular Machine Learning” paper, 
+% consisting of 7,211 molecules with 14 regression targets.
+%
+% STATS:
+% #graphs   #nodes     #edges      #features      #tasks
+% 7,211     ~15.4      ~245.0          0            14
+% 
+%%%%% DATA Transformations
+% coulomb2Adjacency -> convert the [coulomb,atom] Coulomb matrices to an adjacency matrix
+%    adjacency-> [23, 23, 7165],   coulombData-> [23, 23, 7165],   atomData-> [7165, 23]
+%
+%
+% The deep learning model takes as input an adjacency matrix A and a 
+% feature matrix X and outputs categorical predictions.
+% What are the categorical predictions?
+%  - The model predict the atom symbol {'H','C','N','O','S'} of the input
+% So now, what is the input?
+% - The model takes one input molecule, and the output is a prediction
+% probability that correspond to a onehotencode vector 
+% There are 5 possible atom scores, in order: {'H','C','N','O','S'}
+
+
 %% Download data and preprocess it
 
 dataURL = "http://quantum-machine.org/data/qm7.mat";
