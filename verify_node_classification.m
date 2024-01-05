@@ -82,8 +82,8 @@ XTest = dlarray(XTest);
 Averify = normalizeAdjacency(ATest);
 
 % input values for each node is X
-lb = extractdata(XTest-0.1);
-ub = extractdata(XTest+0.1);
+lb = extractdata(XTest-0.01);
+ub = extractdata(XTest+0.01);
 Xverify = ImageStar(lb,ub);
 
 % Do we need a new representation for graphs?
