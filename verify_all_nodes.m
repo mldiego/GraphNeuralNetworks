@@ -67,45 +67,54 @@ N = size(coulombDataTest, 3);
 muX = mean(XTrain);
 sigsqX = var(XTrain,1);
 
+% L_inf size
+epsilon = [0.005; 0.01; 0.02; 0.05];
+
 % Store resuts
 targets = {};
 outputSets = {};
 rT = {};
 
-for i = 1:N
+for k = 1:length(epsilon)
 
-    % preprocess test data (717 molecules in test set)
-    % [ATest,XTest,labelsTest] = preprocessData(adjacencyDataTest,coulombDataTest,atomDataTest);
-    % verify just one molecule?
-    [ATest,XTest,labelsTest] = preprocessData(adjacencyDataTest(:,:,N),coulombDataTest(:,:,N),atomDataTest(N,:));
+    for i = 1:N
     
-    % normalize data
-    XTest = (XTest - muX)./sqrt(sigsqX);
-    XTest = dlarray(XTest);
+        % preprocess test data (717 molecules in test set)
+        % [ATest,XTest,labelsTest] = preprocessData(adjacencyDataTest,coulombDataTest,atomDataTest);
+        % verify just one molecule?
+        [ATest,XTest,labelsTest] = preprocessData(adjacencyDataTest(:,:,N),coulombDataTest(:,:,N),atomDataTest(N,:));
+        
+        % normalize data
+        XTest = (XTest - muX)./sqrt(sigsqX);
+        XTest = dlarray(XTest);
+    
+        % Create an input set
+        
+        % adjacency matrix represent connections, so keep it as is
+        Averify = normalizeAdjacency(ATest);
+        
+        % input values for each node is X
+        lb = extractdata(XTest-epsilon(k));
+        ub = extractdata(XTest+epsilon(k));
+        Xverify = ImageStar(lb,ub);
+        
+        % Compute reachability
+        t = tic;
+        
+        reachMethod = 'approx-star';
+        L = ReluLayer(); % Create relu layer;
+        
+        Y = computeReachability({w1,w2,w3}, L, reachMethod, Xverify, Averify);
+        outputSets{i} = Y;
+        targets{i} = labelsTest;
+        
+        % % Get output bounds
+        % [yLower, yUpper] = Y.getRanges();
+        rT{i} = toc(t);
+    
+    end
 
-    % Create an input set
-    
-    % adjacency matrix represent connections, so keep it as is
-    Averify = normalizeAdjacency(ATest);
-    
-    % input values for each node is X
-    lb = extractdata(XTest-0.01);
-    ub = extractdata(XTest+0.01);
-    Xverify = ImageStar(lb,ub);
-    
-    % Compute reachability
-    t = tic;
-    
-    reachMethod = 'approx-star';
-    L = ReluLayer(); % Create relu layer;
-    
-    Y = computeReachability({w1,w2,w3}, L, reachMethod, Xverify, Averify);
-    outputSets{i} = Y;
-    targets{i} = labelsTest;
-    
-    % % Get output bounds
-    % [yLower, yUpper] = Y.getRanges();
-    rT{i} = toc(t);
+    save("verified_nodes_"+string(epsilon(k))+".mat", "outputSets", "targets", "rT");
 
 end
 
