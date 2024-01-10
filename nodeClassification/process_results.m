@@ -5,7 +5,7 @@ epsilon = [0.005; 0.01; 0.02; 0.05];
 for k = 1:length(epsilon)
     
     % Load data one at a time
-    load("results/verified_nodes_"+string(epsilon(k))+".mat");
+    load("results/verified_nodes_"+modelPath+"_eps"+string(epsilon(k))+".mat");
 
     % Check for robustness value (one molecule, 1 atom at a time)
     results = {};
@@ -16,7 +16,7 @@ for k = 1:length(epsilon)
     end
 
     % Save results
-    save("results/verified_nodes_"+string(epsilon(k))+".mat", "results", "outputSets", "rT", "targets");
+    save("results/verified_nodes_"+modelPath+"_eps"+string(epsilon(k))+".mat", "results", "outputSets", "rT", "targets");
     
 end
 

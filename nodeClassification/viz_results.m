@@ -13,7 +13,7 @@ atoms = zeros(eN,4);     % # robust, #unknown, # not robust/misclassified, # ato
 for k = 1:eN
     
     % Load data one at a time
-    load("results/verified_nodes_"+string(epsilon(k))+".mat");
+    load("results/verified_nodes_"+modelPath+"_eps"+string(epsilon(k))+".mat");
 
     N = length(targets);
     
