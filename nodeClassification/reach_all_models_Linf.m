@@ -48,9 +48,9 @@ epsilon = [0.005, 0.01, 0.02, 0.05]; % attack
 for k=1:length(seeds)
 
     % get model
-    modelPath = "models/gcn_"+string(seeds(k))+".mat";
+    modelPath = "gcn_"+string(seeds(k));
 
     % Verify model
-    verify_model_Linf(modelPath, epsilon, adjacencyDataTest, coulombDataTest, atomDataTest);
+    reach_model_Linf(modelPath, epsilon, adjacencyDataTest, coulombDataTest, atomDataTest);
 
 end

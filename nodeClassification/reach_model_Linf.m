@@ -1,8 +1,8 @@
-function verify_model_Linf(modelPath, epsilon, adjacencyDataTest, coulombDataTest, atomDataTest)
+function reach_model_Linf(modelPath, epsilon, adjacencyDataTest, coulombDataTest, atomDataTest)
     % Verification of a Graph Neural Network
     
     %% Load parameters of gcn
-    load(modelPath);
+    load("models/"+modelPath+".mat");
     
     w1 = gather(parameters.mult1.Weights);
     w2 = gather(parameters.mult2.Weights);
