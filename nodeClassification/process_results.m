@@ -59,7 +59,7 @@ for m=1:length(seeds)
     % Save summary
     save("results/summary_results_Linf_"+modelPath+".mat", "atoms", "molecules");
 
-    model = load("models/"+modelName+".mat");
+    model = load("models/"+modelPath+".mat");
     
     % Create table with these values
     % no need for the molecules, as we could not fully verify any of them

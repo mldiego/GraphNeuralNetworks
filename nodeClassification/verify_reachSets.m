@@ -1,24 +1,31 @@
-%% Process all l_infinity results
+%% Verify the robustness reach sets of all models
 
 epsilon = [0.005; 0.01; 0.02; 0.05];
 seeds = [0,1,2,3,4];
 
-for k = 1:length(epsilon)
-    
-    % Load data one at a time
-    load("results/verified_nodes_"+modelPath+"_eps"+string(epsilon(k))+".mat");
+for m=1:length(seeds)
 
-    % Check for robustness value (one molecule, 1 atom at a time)
-    results = {};
-    for i=1:length(outputSets)
-        Y = outputSets{i};
-        label = targets{i};
-        results{i} = verifyAtom(Y, label);
+    % get model
+    modelPath = "gcn_"+string(seeds(m));
+    
+    for k = 1:length(epsilon)
+    
+        % Load data one at a time
+        load("results/verified_nodes_"+modelPath+"_eps"+string(epsilon(k))+".mat");
+    
+        % Check for robustness value (one molecule, 1 atom at a time)
+        results = {};
+        for i=1:length(outputSets)
+            Y = outputSets{i};
+            label = targets{i};
+            results{i} = verifyAtom(Y, label);
+        end
+    
+        % Save results
+        save("results/verified_nodes_"+modelPath+"_eps"+string(epsilon(k))+".mat", "results", "outputSets", "rT", "targets");
+        
     end
 
-    % Save results
-    save("results/verified_nodes_"+modelPath+"_eps"+string(epsilon(k))+".mat", "results", "outputSets", "rT", "targets");
-    
 end
 
 
