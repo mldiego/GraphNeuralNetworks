@@ -41,11 +41,12 @@ atomDataTest = atomData(idxTest,:);
 %% Verify models
 
 % Study Variables
-seeds = [0,1,2,3,4]; % models
+% seeds = [0,1,2,3,4]; % models
+seeds = [5,6,7,8,9]; % models
 epsilon = [0.005, 0.01, 0.02, 0.05]; % attack
 
 % Verify one model at a time
-for k=1:length(seeds)
+parfor k=1:length(seeds)
 
     % get model
     modelPath = "gcn_"+string(seeds(k));
@@ -54,3 +55,4 @@ for k=1:length(seeds)
     reach_model_Linf(modelPath, epsilon, adjacencyDataTest, coulombDataTest, atomDataTest);
 
 end
+

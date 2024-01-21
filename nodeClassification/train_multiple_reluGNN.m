@@ -83,7 +83,8 @@ XValidation = (XValidation - muX)./sqrt(sigsqX);
 
 %% Create neural network model
 
-seeds = [0,1,2,3,4];
+% seeds = [0,1,2,3,4];
+seeds = [5,6,7,8,9];
 
 for i=1:length(seeds)
     
