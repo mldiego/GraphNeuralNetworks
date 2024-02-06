@@ -1,0 +1,28 @@
+Summary of robustness results of gnn model with accuracy = 0.9058 
+
+               MOLECULES 
+Pixels (%) | Robust  Unknown  Not Rob.  N 
+   10       | NaN    NaN   NaN   0 
+   20       | NaN    NaN   NaN   0 
+   30       | 0.000    0.000   0.000   7170 
+   40       | NaN    NaN   NaN   0 
+   50       | NaN    NaN   NaN   0 
+   60       | NaN    NaN   NaN   0 
+   70       | NaN    NaN   NaN   0 
+   80       | NaN    NaN   NaN   0 
+   90       | NaN    NaN   NaN   0 
+   100       | NaN    NaN   NaN   0 
+ 
+
+                 ATOMS 
+Pixels (%) | Robust  Unknown  Not Rob.  N 
+   10       | NaN    NaN   NaN   0 
+   20       | NaN    NaN   NaN   0 
+   30       | 0.316    0.000   0.053   136230 
+   40       | NaN    NaN   NaN   0 
+   50       | NaN    NaN   NaN   0 
+   60       | NaN    NaN   NaN   0 
+   70       | NaN    NaN   NaN   0 
+   80       | NaN    NaN   NaN   0 
+   90       | NaN    NaN   NaN   0 
+   100       | NaN    NaN   NaN   0 
